@@ -89,12 +89,16 @@ export function FeedSection({
   const posts = filterPosts(MOCK[businessFunction], filterQuery);
 
   return (
-    <section className="w-full" aria-labelledby={`section-${businessFunction}`}>
+    <section
+      className="scroll-mt-24 w-full"
+      id={`section-${businessFunction}`}
+      aria-labelledby={`heading-${businessFunction}`}
+    >
       <div
         className={`mb-3 flex items-center justify-between border-b border-zinc-700/60 bg-gradient-to-r ${accent} px-2 py-3 md:rounded-t-lg md:px-4`}
       >
         <h2
-          id={`section-${businessFunction}`}
+          id={`heading-${businessFunction}`}
           className="text-base font-bold tracking-tight text-dark-200 md:text-lg"
         >
           {title}

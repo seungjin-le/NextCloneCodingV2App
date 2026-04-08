@@ -1,24 +1,113 @@
 @import "tailwindcss";
 
 :root {
-  --background: #1a1a1c;
-  --foreground: #e4e4e7;
+    --background: #1a1a1c;
+    --foreground: #e4e4e7;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-noto-sans-kr);
-  --font-mono: var(--font-geist-mono);
-  --color-dark-200: #e4e4e7;
-  --color-dark-500: #252526;
-  --color-dark-600: #1e1e1f;
-  --color-blurple-500: #5865f2;
-  --color-blurple-600: #4752c4;
+    --color-background: var(--background);
+    --color-foreground: var(--foreground);
+    --font-sans: var(--font-noto-sans-kr);
+    --font-mono: var(--font-geist-mono);
+    --color-dark-200: #e4e4e7;
+    --color-dark-500: #252526;
+    --color-dark-600: #1e1e1f;
+    --color-blurple-500: #5865f2;
+    --color-blurple-600: #4752c4;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: var(--font-noto-sans-kr), system-ui, sans-serif;
+    background: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-noto-sans-kr), system-ui, sans-serif;
+}
+
+
+@utility flex-col-center {
+    @apply flex flex-col items-center justify-center;
+}
+
+@utility flex-col-center-between {
+    @apply flex flex-col items-center justify-between;
+}
+
+@utility flex-col-center-start {
+    @apply flex flex-col items-center justify-start;
+}
+
+@utility flex-col-end-start {
+    @apply flex flex-col items-end justify-start;
+}
+
+@utility flex-col-start-end {
+    @apply flex flex-col items-start justify-end;
+}
+
+@utility flex-col-start {
+    @apply flex flex-col items-start justify-center;
+}
+
+@utility flex-col-end {
+    @apply flex flex-col items-end justify-center;
+}
+
+@utility flex-col-start-start {
+    @apply flex flex-col items-start justify-start;
+}
+
+@utility flex-col-start-between {
+    @apply flex flex-col items-start justify-between;
+}
+
+@utility flex-col-center-end {
+    @apply flex flex-col items-center justify-end;
+}
+
+@utility flex-col-start-center {
+    @apply flex flex-col items-start justify-center;
+}
+
+@utility flex-row-center {
+    @apply flex flex-row items-center justify-center;
+}
+
+@utility flex-row-start {
+    @apply flex flex-row items-start justify-start;
+}
+
+@utility flex-row-center-between {
+    @apply flex flex-row items-center justify-between;
+}
+
+@utility flex-row-center-start {
+    @apply flex flex-row items-center justify-start;
+}
+
+@utility flex-row-center-end {
+    @apply flex flex-row items-center justify-end;
+}
+
+@utility flex-row-start-center {
+    @apply flex flex-row items-start justify-center;
+}
+
+@utility flex-row-start-between {
+    @apply flex flex-row items-start justify-between;
+}
+
+@utility flex-row-end-center {
+    @apply flex flex-row items-end justify-center;
+}
+
+@utility flex-row-end-end {
+    @apply flex flex-row items-end justify-end;
+}
+
+@utility flex-row-end-start {
+    @apply flex flex-row items-end justify-start;
+}
+
+@utility flex-row-start-end {
+    @apply flex flex-row items-start justify-end;
 }
