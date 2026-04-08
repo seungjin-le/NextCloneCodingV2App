@@ -14,6 +14,19 @@ type MockPost = {
   time: string;
 };
 
+function filterPosts(posts: MockPost[], query: string): MockPost[] {
+  const q = query.trim().toLowerCase();
+  if (!q) {
+    return posts;
+  }
+  return posts.filter(
+    (p) =>
+      p.title.toLowerCase().includes(q) ||
+      p.author.toLowerCase().includes(q) ||
+      p.price.toLowerCase().includes(q),
+  );
+}
+
 const MOCK: Record<BusinessFunction, MockPost[]> = {
   sell: [
     {
@@ -65,9 +78,15 @@ const MOCK: Record<BusinessFunction, MockPost[]> = {
   ],
 };
 
-export function FeedSection({ businessFunction }: { businessFunction: BusinessFunction }) {
+export function FeedSection({
+  businessFunction,
+  filterQuery = "",
+}: {
+  businessFunction: BusinessFunction;
+  filterQuery?: string;
+}) {
   const { title, accent } = LABELS[businessFunction];
-  const posts = MOCK[businessFunction];
+  const posts = filterPosts(MOCK[businessFunction], filterQuery);
 
   return (
     <section className="w-full" aria-labelledby={`section-${businessFunction}`}>
@@ -83,6 +102,11 @@ export function FeedSection({ businessFunction }: { businessFunction: BusinessFu
         <span className="text-xs text-zinc-500">더보기</span>
       </div>
       <ul className="flex flex-col gap-2 px-2 md:px-0">
+        {posts.length === 0 ? (
+          <li className="rounded-lg border border-dashed border-zinc-700 px-3 py-6 text-center text-sm text-zinc-500">
+            검색 결과가 없습니다.
+          </li>
+        ) : null}
         {posts.map((post) => (
           <li key={post.id}>
             <article className="flex gap-3 rounded-lg border border-zinc-700/50 bg-dark-600/80 p-3 transition hover:border-zinc-600">
