@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { useState } from 'react'
 import { SearchForm } from '@/components/SearchForm'
 import { WritePostDialog } from '@/components/WritePostDialog'
+import { SearchInput } from '@/components/inputs'
 
 function IconSearch(props: React.SVGProps<SVGSVGElement>) {
   return (
@@ -73,43 +74,45 @@ export function SiteHeader({ onMenuClick }: SiteHeaderProps) {
               </button>
             </div>
           </div>
-
-          <div className="flex h-12 items-center justify-between pr-2 pl-5 lg:hidden">
-            <div className="flex flex-row items-center space-x-4">
-              <button type="button" aria-label="메뉴 열기" className="text-zinc-200 lg:hidden" onClick={() => onMenuClick?.()}>
-                <IconMenu className="size-6" />
-              </button>
-              <Link href="/" className="flex shrink-0 items-center justify-center overflow-hidden rounded">
-                <Image src="/guheyo/guheyo-logo.svg" alt="guheyo logo" width={32} height={32} className="size-8 object-cover" priority />
-              </Link>
-            </div>
-            <div className="flex items-center space-x-0">
-              <button
-                type="button"
-                aria-expanded={searchExpanded}
-                aria-label="검색 열기"
-                onClick={() => setSearchExpanded((v) => !v)}
-                className="inline-flex size-10 items-center justify-center rounded-full text-zinc-300"
-              >
-                <IconSearch className="size-6" />
-              </button>
-              <button type="button" className="inline-flex size-10 items-center justify-center rounded-full text-zinc-300" aria-label="글쓰기" onClick={() => setWriteOpen(true)}>
-                <IconAdd className="size-7" />
-              </button>
-              <button type="button" className="bg-blurple-500 hover:bg-blurple-600 inline-flex items-center gap-2 rounded-lg px-2 py-2 text-xs font-bold text-zinc-100">
-                <Image src="/socials/discord/discord-mark-white.svg" alt="" width={20} height={20} className="size-5" />
-                로그인
-              </button>
-            </div>
-          </div>
-
-          {searchExpanded ? (
-            <div className="bg-dark-600 border-t border-zinc-700/80 px-3 py-3 lg:px-7">
-              <div className="mx-auto flex max-w-md justify-center lg:max-w-none">
-                <SearchForm />
+          <SearchInput />
+          <div className={'flex-row-center'}>
+            <div className="flex h-12 items-center justify-between pr-2 pl-5 lg:hidden">
+              <div className="flex flex-row items-center space-x-4">
+                <button type="button" aria-label="메뉴 열기" className="text-zinc-200 lg:hidden" onClick={() => onMenuClick?.()}>
+                  <IconMenu className="size-6" />
+                </button>
+                <Link href="/" className="flex shrink-0 items-center justify-center overflow-hidden rounded">
+                  <Image src="/guheyo/guheyo-logo.svg" alt="guheyo logo" width={32} height={32} className="size-8 object-cover" priority />
+                </Link>
+              </div>
+              <div className="flex items-center space-x-0">
+                <button
+                  type="button"
+                  aria-expanded={searchExpanded}
+                  aria-label="검색 열기"
+                  onClick={() => setSearchExpanded((v) => !v)}
+                  className="inline-flex size-10 items-center justify-center rounded-full text-zinc-300"
+                >
+                  <IconSearch className="size-6" />
+                </button>
+                <button type="button" className="inline-flex size-10 items-center justify-center rounded-full text-zinc-300" aria-label="글쓰기" onClick={() => setWriteOpen(true)}>
+                  <IconAdd className="size-7" />
+                </button>
+                <button type="button" className="bg-blurple-500 hover:bg-blurple-600 inline-flex items-center gap-2 rounded-lg px-2 py-2 text-xs font-bold text-zinc-100">
+                  <Image src="/socials/discord/discord-mark-white.svg" alt="" width={20} height={20} className="size-5" />
+                  로그인
+                </button>
               </div>
             </div>
-          ) : null}
+
+            {searchExpanded ? (
+              <div className="bg-dark-600 border-t border-zinc-700/80 px-3 py-3 lg:px-7">
+                <div className="mx-auto flex max-w-md justify-center lg:max-w-none">
+                  <SearchForm />
+                </div>
+              </div>
+            ) : null}
+          </div>
         </header>
       </div>
 
