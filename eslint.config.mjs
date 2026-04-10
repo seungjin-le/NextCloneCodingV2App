@@ -29,4 +29,4 @@ const eslintConfig = defineConfig([
   ])
 ])
 
-export default eslintConfig
+export default eslintConfig;

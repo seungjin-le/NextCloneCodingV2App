@@ -42,3 +42,8 @@ yarn.lock
 *.tsbuildinfo
 next-env.d.ts
 .idea
+.vscode
+.next
+.cursor
+*storybook.log
+storybook-static
