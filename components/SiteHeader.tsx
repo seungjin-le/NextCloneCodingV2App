@@ -5,7 +5,6 @@ import Link from 'next/link'
 import { useState } from 'react'
 import { SearchForm } from '@/components/SearchForm'
 import { WritePostDialog } from '@/components/WritePostDialog'
-import { SearchInput } from '@/components/inputs'
 
 function IconSearch(props: React.SVGProps<SVGSVGElement>) {
   return (
@@ -41,80 +40,89 @@ export function SiteHeader({ onMenuClick }: SiteHeaderProps) {
 
   return (
     <>
-      <div className="sticky top-0 z-40 w-full">
-        <header className="bg-dark-500 w-full">
-          <div className="flex-row-center-between relative h-14 w-full px-6">
-            <div className="flex-row-center-end space-x-2 pr-7">
-              <button
-                type="button"
-                className="inline-flex size-10 items-center justify-center rounded-full text-zinc-300 transition hover:bg-white/5"
-                aria-label="글쓰기"
-                onClick={() => setWriteOpen(true)}
-              >
-                <IconAdd className="size-7" />
-              </button>
-              <button
-                type="button"
-                className="bg-blurple-500 hover:bg-blurple-600 inline-flex items-center gap-2 rounded-lg px-2 py-2 text-xs font-bold text-zinc-100 transition md:text-sm"
-              >
-                <Image src="/socials/discord/discord-mark-white.svg" alt="" width={20} height={20} className="size-5" />
-                로그인
-              </button>
-            </div>
+      <header className="bg-dark-500 sticky top-0 z-40 w-full border-b border-zinc-700/50">
+        {/* 모바일 헤더 (lg 미만) */}
+        <div className="flex h-14 items-center justify-between px-4 lg:hidden">
+          <div className="flex items-center gap-3">
+            <button
+              type="button"
+              aria-label="메뉴 열기"
+              className="inline-flex size-9 items-center justify-center rounded-full text-zinc-300 transition hover:bg-white/5"
+              onClick={() => onMenuClick?.()}
+            >
+              <IconMenu className="size-5" />
+            </button>
+            <Link href="/" className="flex items-center gap-2">
+              <Image src="/guheyo/guheyo-logo.svg" alt="구해요 로고" width={28} height={28} className="size-7 object-cover" priority />
+              <span className="text-base font-bold tracking-tight text-zinc-100">구해요</span>
+            </Link>
+          </div>
 
-            <div className="flex">
-              <button
-                type="button"
-                aria-expanded={searchExpanded}
-                aria-label="검색 열기"
-                onClick={() => setSearchExpanded((v) => !v)}
-                className="inline-flex size-10 items-center justify-center rounded-full text-zinc-300 transition hover:bg-white/5"
-              >
-                <IconSearch className="size-6" />
-              </button>
+          <div className="flex items-center gap-0.5">
+            <button
+              type="button"
+              aria-label="검색 열기"
+              aria-expanded={searchExpanded}
+              onClick={() => setSearchExpanded((v) => !v)}
+              className="inline-flex size-9 items-center justify-center rounded-full text-zinc-300 transition hover:bg-white/5"
+            >
+              <IconSearch className="size-5" />
+            </button>
+            <button
+              type="button"
+              aria-label="글쓰기"
+              onClick={() => setWriteOpen(true)}
+              className="inline-flex size-9 items-center justify-center rounded-full text-zinc-300 transition hover:bg-white/5"
+            >
+              <IconAdd className="size-6" />
+            </button>
+            <button
+              type="button"
+              className="bg-blurple-500 hover:bg-blurple-600 ml-1 inline-flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-xs font-bold text-zinc-100 transition"
+            >
+              <Image src="/socials/discord/discord-mark-white.svg" alt="" width={16} height={16} className="size-4" />
+              로그인
+            </button>
+          </div>
+        </div>
+
+        {/* 데스크탑 헤더 (lg 이상) */}
+        <div className="hidden h-14 items-center justify-end gap-1.5 px-6 lg:flex">
+          <button
+            type="button"
+            aria-label="검색 열기"
+            aria-expanded={searchExpanded}
+            onClick={() => setSearchExpanded((v) => !v)}
+            className="inline-flex size-9 items-center justify-center rounded-full text-zinc-300 transition hover:bg-white/5"
+          >
+            <IconSearch className="size-5" />
+          </button>
+          <button
+            type="button"
+            aria-label="글쓰기"
+            onClick={() => setWriteOpen(true)}
+            className="inline-flex size-9 items-center justify-center rounded-full text-zinc-300 transition hover:bg-white/5"
+          >
+            <IconAdd className="size-6" />
+          </button>
+          <button
+            type="button"
+            className="bg-blurple-500 hover:bg-blurple-600 inline-flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-bold text-zinc-100 transition"
+          >
+            <Image src="/socials/discord/discord-mark-white.svg" alt="" width={18} height={18} className="size-[18px]" />
+            로그인
+          </button>
+        </div>
+
+        {/* 검색 확장 영역 */}
+        {searchExpanded && (
+          <div className="border-t border-zinc-700/80 bg-dark-600 px-4 py-3">
+            <div className="mx-auto max-w-xl">
+              <SearchForm />
             </div>
           </div>
-          <SearchInput />
-          <div className={'flex-row-center'}>
-            <div className="flex h-12 items-center justify-between pr-2 pl-5 lg:hidden">
-              <div className="flex flex-row items-center space-x-4">
-                <button type="button" aria-label="메뉴 열기" className="text-zinc-200 lg:hidden" onClick={() => onMenuClick?.()}>
-                  <IconMenu className="size-6" />
-                </button>
-                <Link href="/" className="flex shrink-0 items-center justify-center overflow-hidden rounded">
-                  <Image src="/guheyo/guheyo-logo.svg" alt="guheyo logo" width={32} height={32} className="size-8 object-cover" priority />
-                </Link>
-              </div>
-              <div className="flex items-center space-x-0">
-                <button
-                  type="button"
-                  aria-expanded={searchExpanded}
-                  aria-label="검색 열기"
-                  onClick={() => setSearchExpanded((v) => !v)}
-                  className="inline-flex size-10 items-center justify-center rounded-full text-zinc-300"
-                >
-                  <IconSearch className="size-6" />
-                </button>
-                <button type="button" className="inline-flex size-10 items-center justify-center rounded-full text-zinc-300" aria-label="글쓰기" onClick={() => setWriteOpen(true)}>
-                  <IconAdd className="size-7" />
-                </button>
-                <button type="button" className="bg-blurple-500 hover:bg-blurple-600 inline-flex items-center gap-2 rounded-lg px-2 py-2 text-xs font-bold text-zinc-100">
-                  <Image src="/socials/discord/discord-mark-white.svg" alt="" width={20} height={20} className="size-5" />
-                  로그인
-                </button>
-              </div>
-            </div>
-
-            {searchExpanded ? (
-              <div className="bg-dark-600 border-t border-zinc-700/80 px-3 py-3 lg:px-7">
-                <div className="mx-auto flex max-w-md justify-center lg:max-w-none">
-                  <SearchForm />
-                </div>
-              </div>
-            ) : null}
-          </div>
-        </header>
-      </div>
+        )}
+      </header>
 
       <WritePostDialog open={writeOpen} onOpenChange={setWriteOpen} />
     </>
