@@ -1,8 +1,33 @@
 @import "tailwindcss";
 
 :root {
-    --background: #1a1a1c;
+    --background: #323338;
     --foreground: #e4e4e7;
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes fade-out {
+  from { opacity: 1; }
+  to   { opacity: 0; }
+}
+@keyframes slide-up {
+  from { transform: translateY(100%); opacity: 0; }
+  to   { transform: translateY(0);    opacity: 1; }
+}
+@keyframes slide-down {
+  from { transform: translateY(0);    opacity: 1; }
+  to   { transform: translateY(100%); opacity: 0; }
+}
+@keyframes scale-in {
+  from { transform: scale(0.95); opacity: 0; }
+  to   { transform: scale(1);    opacity: 1; }
+}
+@keyframes scale-out {
+  from { transform: scale(1);    opacity: 1; }
+  to   { transform: scale(0.95); opacity: 0; }
 }
 
 @theme inline {
@@ -15,6 +40,13 @@
     --color-dark-600: #1e1e1f;
     --color-blurple-500: #5865f2;
     --color-blurple-600: #4752c4;
+
+    --animate-fade-in:    fade-in  0.15s ease-out both;
+    --animate-fade-out:   fade-out 0.15s ease-in  both;
+    --animate-slide-up:   slide-up   0.22s cubic-bezier(0.32,0.72,0,1) both;
+    --animate-slide-down: slide-down 0.18s ease-in both;
+    --animate-scale-in:   scale-in  0.18s cubic-bezier(0.32,0.72,0,1) both;
+    --animate-scale-out:  scale-out 0.15s ease-in both;
 }
 
 body {

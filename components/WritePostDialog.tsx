@@ -1,7 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { type WritePostFormValues, writePostSchema } from "@/lib/validations";
 
@@ -11,6 +11,9 @@ type WritePostDialogProps = {
 };
 
 export function WritePostDialog({ open, onOpenChange }: WritePostDialogProps) {
+  const [mounted, setMounted] = useState(false);
+  const [closing, setClosing] = useState(false);
+
   const {
     register,
     handleSubmit,
@@ -27,13 +30,17 @@ export function WritePostDialog({ open, onOpenChange }: WritePostDialogProps) {
   });
 
   useEffect(() => {
+    if (open) {
+      setClosing(false);
+      setMounted(true);
+    } else if (mounted) {
+      setClosing(true);
+    }
+  }, [open]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(() => {
     if (!open) {
-      reset({
-        category: "sell",
-        title: "",
-        price: "",
-        body: "",
-      });
+      reset({ category: "sell", title: "", price: "", body: "" });
     }
   }, [open, reset]);
 
@@ -41,28 +48,37 @@ export function WritePostDialog({ open, onOpenChange }: WritePostDialogProps) {
     onOpenChange(false);
   }, [onOpenChange]);
 
+  const handleAnimationEnd = useCallback(() => {
+    if (closing) {
+      setMounted(false);
+      setClosing(false);
+    }
+  }, [closing]);
+
   const onSubmit = (data: WritePostFormValues) => {
-    // 데모: 실제 API 연동 시 여기서 전송
     console.info("[write-post]", data);
   };
 
-  if (!open) {
-    return null;
-  }
+  if (!mounted) return null;
 
   return (
     <div className="fixed inset-0 z-50 flex items-end justify-center sm:items-center">
       <button
         type="button"
         aria-label="닫기"
-        className="absolute inset-0 bg-black/60"
+        className={`absolute inset-0 bg-black/60 ${closing ? "animate-fade-out" : "animate-fade-in"}`}
         onClick={close}
       />
       <div
         role="dialog"
         aria-modal="true"
         aria-labelledby="write-post-title"
-        className="relative z-10 m-0 w-full max-w-lg rounded-t-xl border border-zinc-700 bg-dark-600 p-4 shadow-xl sm:m-4 sm:rounded-xl"
+        onAnimationEnd={handleAnimationEnd}
+        className={`relative z-10 m-0 w-full max-w-lg rounded-t-xl border border-zinc-700 bg-dark-600 p-4 shadow-xl sm:m-4 sm:rounded-xl ${
+          closing
+            ? "animate-slide-down sm:animate-scale-out"
+            : "animate-slide-up sm:animate-scale-in"
+        }`}
       >
         <div className="mb-4 flex items-center justify-between gap-2">
           <h2 id="write-post-title" className="text-lg font-bold text-zinc-100">
