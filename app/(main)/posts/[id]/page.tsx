@@ -2,6 +2,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { FeedSection } from '@/components/FeedSection'
+import { ImageGallery } from '@/components/ImageGallery'
 import { getNavPageLabel } from '@/lib/nav'
 import { getPostById, getSimilarPosts } from '@/lib/data'
 
@@ -78,6 +79,13 @@ export default async function PostDetailPage({ params }: { params: Promise<{ id:
         <div className="mb-6 whitespace-pre-wrap text-sm leading-relaxed text-zinc-300">
           {post.body}
         </div>
+
+        {/* 첨부 이미지 */}
+        {post.images && post.images.length > 0 && (
+          <div className="mb-6">
+            <ImageGallery images={post.images} />
+          </div>
+        )}
 
         {/* 전체 태그 */}
         {post.tags.length > 0 && (

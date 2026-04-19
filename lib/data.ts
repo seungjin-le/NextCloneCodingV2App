@@ -14,6 +14,7 @@ export type MockPost = {
   thumbnailColor: string
   viewCount: number
   likeCount: number
+  images?: string[]
 }
 
 const THUMBNAIL_COLORS = [
@@ -47,6 +48,11 @@ export const MOCK_POSTS: MockPost[] = [
     thumbnailColor: color(0),
     viewCount: 142,
     likeCount: 8,
+    images: [
+      'https://picsum.photos/seed/kb-s-1a/800/600',
+      'https://picsum.photos/seed/kb-s-1b/800/600',
+      'https://picsum.photos/seed/kb-s-1c/800/600',
+    ],
   },
   {
     id: 'kb-s-2',
@@ -62,6 +68,10 @@ export const MOCK_POSTS: MockPost[] = [
     thumbnailColor: color(1),
     viewCount: 287,
     likeCount: 21,
+    images: [
+      'https://picsum.photos/seed/kb-s-2a/800/600',
+      'https://picsum.photos/seed/kb-s-2b/800/600',
+    ],
   },
   {
     id: 'kb-s-3',
