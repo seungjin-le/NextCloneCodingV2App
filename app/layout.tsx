@@ -26,7 +26,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko" className={`${notoSansKr.variable} ${geistMono.variable} h-full antialiased`}>
-      <body className="text-dark-200 bg-dark-500 flex min-h-full flex-col break-keep">{children}</body>
+      <body className="text-dark-200 bg-background flex min-h-full flex-col break-keep">{children}</body>
     </html>
   )
 }

@@ -6,7 +6,12 @@ import { Suspense, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { type SearchFormValues, searchSchema } from '@/lib/validations'
 
-function SearchFormFields() {
+type SearchFormFieldsProps = {
+  autoFocus?: boolean
+  compact?: boolean
+}
+
+function SearchFormFields({ autoFocus, compact }: SearchFormFieldsProps) {
   const router = useRouter()
   const searchParams = useSearchParams()
   const {
@@ -28,7 +33,7 @@ function SearchFormFields() {
   }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="flex w-full max-w-md flex-col gap-1 sm:flex-row sm:items-start sm:gap-2">
+    <form onSubmit={handleSubmit(onSubmit)} className="flex w-full items-center gap-2">
       <div className="min-w-0 flex-1">
         <label htmlFor="header-search-q" className="sr-only">
           검색어
@@ -37,7 +42,8 @@ function SearchFormFields() {
           id="header-search-q"
           type="search"
           autoComplete="off"
-          placeholder="게시글 검색"
+          autoFocus={autoFocus}
+          placeholder="게시글 검색..."
           className="focus:border-blurple-500 focus:ring-blurple-500 w-full rounded-lg border border-zinc-600 bg-zinc-800/90 px-3 py-2 text-sm text-zinc-100 placeholder:text-zinc-500 focus:ring-1 focus:outline-none"
           {...register('q')}
         />
@@ -47,9 +53,11 @@ function SearchFormFields() {
           </p>
         ) : null}
       </div>
-      <button type="submit" className="shrink-0 rounded-lg bg-zinc-700 px-4 py-2 text-sm font-semibold text-zinc-100 transition hover:bg-zinc-600">
-        검색
-      </button>
+      {!compact && (
+        <button type="submit" className="shrink-0 rounded-lg bg-zinc-700 px-4 py-2 text-sm font-semibold text-zinc-100 transition hover:bg-zinc-600">
+          검색
+        </button>
+      )}
     </form>
   )
 }
@@ -63,10 +71,15 @@ function SearchFormFallback() {
   )
 }
 
-export function SearchForm() {
+type SearchFormProps = {
+  autoFocus?: boolean
+  compact?: boolean
+}
+
+export function SearchForm({ autoFocus, compact }: SearchFormProps) {
   return (
     <Suspense fallback={<SearchFormFallback />}>
-      <SearchFormFields />
+      <SearchFormFields autoFocus={autoFocus} compact={compact} />
     </Suspense>
   )
 }
