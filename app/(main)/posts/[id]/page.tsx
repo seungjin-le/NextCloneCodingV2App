@@ -1,5 +1,6 @@
 import Image from 'next/image'
 import Link from 'next/link'
+import { PageLayout, ContentContainer } from '@/components/container'
 import { notFound } from 'next/navigation'
 import { FeedSection } from '@/components/FeedSection'
 import { ImageGallery } from '@/components/ImageGallery'
@@ -22,7 +23,7 @@ export default async function PostDetailPage({ params }: { params: Promise<{ id:
   const similar = getSimilarPosts(post)
 
   return (
-    <div className="w-full max-w-3xl px-4 py-6 lg:px-8">
+    <PageLayout>
       {/* 브레드크럼 */}
       <nav className="mb-4 flex items-center gap-1.5 text-xs text-zinc-500">
         <Link href="/" className="transition hover:text-zinc-300">홈</Link>
@@ -38,6 +39,7 @@ export default async function PostDetailPage({ params }: { params: Promise<{ id:
         <span className="max-w-[160px] truncate text-zinc-400">{post.title}</span>
       </nav>
 
+      <ContentContainer>
       {/* 게시글 카드 */}
       <article className="rounded-xl border border-zinc-700/60 bg-dark-600 p-5 shadow-lg">
         {/* 배지 + 제목 */}
@@ -136,16 +138,18 @@ export default async function PostDetailPage({ params }: { params: Promise<{ id:
         </div>
       )}
 
-      {/* 뒤로 가기 */}
-      <div className="mt-8">
-        <Link
-          href={labels ? `/${post.category}/${post.slug}` : '/'}
-          className="text-sm text-zinc-500 transition hover:text-zinc-300"
-        >
-          ← {labels ? `${labels.secondary} 목록으로` : '홈으로'}
-        </Link>
-      </div>
-    </div>
+
+        {/* 뒤로 가기 */}
+        <div className="mt-8">
+          <Link
+            href={labels ? `/${post.category}/${post.slug}` : '/'}
+            className="text-sm text-zinc-500 transition hover:text-zinc-300"
+          >
+            ← {labels ? `${labels.secondary} 목록으로` : '홈으로'}
+          </Link>
+        </div>
+      </ContentContainer>
+    </PageLayout>
   )
 }
 

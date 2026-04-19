@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
+import { PageLayout, ContentContainer } from '@/components/container'
 import { FeedSection } from '@/components/FeedSection'
 import { type BusinessFunction } from '@/lib/data'
 import { getNavPageLabel, isValidNavPath } from '@/lib/nav'
@@ -32,7 +33,7 @@ export default async function CategoryPage({
   const activeTab: BusinessFunction = isBusinessFunction(type) ? type : 'sell'
 
   return (
-    <div className="mx-auto w-full max-w-3xl px-4 py-6 lg:px-8">
+    <PageLayout>
       {/* 브레드크럼 */}
       <nav className="mb-4 flex items-center gap-1.5 text-xs text-zinc-500">
         <Link href="/" className="transition hover:text-zinc-300">
@@ -50,34 +51,36 @@ export default async function CategoryPage({
         {labels.primary} &gt; {labels.secondary} 카테고리의 거래 게시글입니다.
       </p>
 
-      {/* 탭 네비게이션 */}
-      <div className="mb-6 flex gap-0 border-b border-zinc-700/60">
-        {TABS.map(({ value, label, accent }) => {
-          const isActive = activeTab === value
-          return (
-            <Link
-              key={value}
-              href={`/${category}/${slug}?type=${value}${q ? `&q=${encodeURIComponent(q)}` : ''}`}
-              className={`-mb-px border-b-2 px-4 py-2.5 text-sm font-medium transition ${
-                isActive
-                  ? `${accent} border-current`
-                  : 'border-transparent text-zinc-500 hover:text-zinc-300'
-              }`}
-            >
-              {label}
-            </Link>
-          )
-        })}
-      </div>
+      <ContentContainer>
+        {/* 탭 네비게이션 */}
+        <div className="mb-6 flex gap-0 border-b border-zinc-700/60">
+          {TABS.map(({ value, label, accent }) => {
+            const isActive = activeTab === value
+            return (
+              <Link
+                key={value}
+                href={`/${category}/${slug}?type=${value}${q ? `&q=${encodeURIComponent(q)}` : ''}`}
+                className={`-mb-px border-b-2 px-4 py-2.5 text-sm font-medium transition ${
+                  isActive
+                    ? `${accent} border-current`
+                    : 'border-transparent text-zinc-500 hover:text-zinc-300'
+                }`}
+              >
+                {label}
+              </Link>
+            )
+          })}
+        </div>
 
-      {/* 피드 */}
-      <FeedSection
-        businessFunction={activeTab}
-        filterQuery={q}
-        categoryFilter={{ category, slug }}
-        limit={20}
-      />
-    </div>
+        {/* 피드 */}
+        <FeedSection
+          businessFunction={activeTab}
+          filterQuery={q}
+          categoryFilter={{ category, slug }}
+          limit={20}
+        />
+      </ContentContainer>
+    </PageLayout>
   )
 }
 

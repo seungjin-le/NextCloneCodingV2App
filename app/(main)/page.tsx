@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { PageContainer } from '@/components/container'
 import { FeedSection } from '@/components/FeedSection'
 
 const QUICK_LINKS = [
@@ -14,7 +15,7 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ q
   const q = (await searchParams).q?.trim() ?? ''
 
   return (
-    <div className="mx-auto w-full max-w-3xl px-4 py-6 lg:px-8">
+    <PageContainer>
       {/* 카테고리 빠른 링크 */}
       {!q && (
         <div className="mb-8">
@@ -41,6 +42,6 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ q
       </div>
 
       <footer className="mt-12 pb-8 text-center text-xs text-zinc-700">데모 UI · 실제 거래·로그인은 원본 서비스와 연결되지 않습니다.</footer>
-    </div>
+    </PageContainer>
   )
 }
