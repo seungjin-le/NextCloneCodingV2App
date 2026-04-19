@@ -7,14 +7,14 @@ const QUICK_LINKS = [
   { href: '/group/audio', label: '🎧 음향기기' },
   { href: '/market/trade', label: '🏪 거래' },
   { href: '/market/auction', label: '🔨 경매' },
-  { href: '/market/group-buy', label: '🛒 공동구매' },
+  { href: '/market/group-buy', label: '🛒 공동구매' }
 ]
 
 export default async function Home({ searchParams }: { searchParams: Promise<{ q?: string }> }) {
   const q = (await searchParams).q?.trim() ?? ''
 
   return (
-    <div className="w-full max-w-3xl px-4 py-6 lg:px-8">
+    <div className="mx-auto w-full max-w-3xl px-4 py-6 lg:px-8">
       {/* 카테고리 빠른 링크 */}
       {!q && (
         <div className="mb-8">
@@ -40,9 +40,7 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ q
         <FeedSection businessFunction="swap" filterQuery={q} />
       </div>
 
-      <footer className="mt-12 pb-8 text-center text-xs text-zinc-700">
-        데모 UI · 실제 거래·로그인은 원본 서비스와 연결되지 않습니다.
-      </footer>
+      <footer className="mt-12 pb-8 text-center text-xs text-zinc-700">데모 UI · 실제 거래·로그인은 원본 서비스와 연결되지 않습니다.</footer>
     </div>
   )
 }

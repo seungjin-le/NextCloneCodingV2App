@@ -92,7 +92,7 @@ export function FeedSection({
     >
       {!hideHeader && (
         <div
-          className={`mb-3 flex items-center justify-between border-b border-zinc-700/60 bg-gradient-to-r ${accent} px-2 py-3 md:rounded-t-lg md:px-4`}
+          className={`relative mb-3 flex items-center justify-center border-b border-zinc-700/60 bg-gradient-to-r ${accent} px-2 py-3 md:rounded-t-lg md:px-4`}
         >
           <h2
             id={`heading-${businessFunction}`}
@@ -100,7 +100,7 @@ export function FeedSection({
           >
             {title}
           </h2>
-          <Link href={moreHref} className="text-xs text-zinc-500 transition hover:text-zinc-300">
+          <Link href={moreHref} className="absolute right-4 text-xs text-zinc-500 transition hover:text-zinc-300">
             더보기 →
           </Link>
         </div>

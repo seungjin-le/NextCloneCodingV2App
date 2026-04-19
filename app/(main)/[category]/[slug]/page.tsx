@@ -32,7 +32,7 @@ export default async function CategoryPage({
   const activeTab: BusinessFunction = isBusinessFunction(type) ? type : 'sell'
 
   return (
-    <div className="w-full max-w-3xl px-4 py-6 lg:px-8">
+    <div className="mx-auto w-full max-w-3xl px-4 py-6 lg:px-8">
       {/* 브레드크럼 */}
       <nav className="mb-4 flex items-center gap-1.5 text-xs text-zinc-500">
         <Link href="/" className="transition hover:text-zinc-300">
