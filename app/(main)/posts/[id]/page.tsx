@@ -25,18 +25,18 @@ export default async function PostDetailPage({ params }: { params: Promise<{ id:
   return (
     <PageLayout>
       {/* 브레드크럼 */}
-      <nav className="mb-4 flex items-center gap-1.5 text-xs text-zinc-500">
-        <Link href="/" className="transition hover:text-zinc-300">홈</Link>
+      <nav className="mb-4 flex min-w-0 items-center gap-1.5 text-xs text-zinc-500">
+        <Link href="/" className="shrink-0 transition hover:text-zinc-300">홈</Link>
         {labels && (
           <>
-            <span>/</span>
-            <Link href={`/${post.category}/${post.slug}`} className="transition hover:text-zinc-300">
+            <span className="shrink-0">/</span>
+            <Link href={`/${post.category}/${post.slug}`} className="shrink-0 transition hover:text-zinc-300">
               {labels.secondary}
             </Link>
           </>
         )}
-        <span>/</span>
-        <span className="max-w-[160px] truncate text-zinc-400">{post.title}</span>
+        <span className="shrink-0">/</span>
+        <span className="min-w-0 truncate text-zinc-400">{post.title}</span>
       </nav>
 
       <ContentContainer>
