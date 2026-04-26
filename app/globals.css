@@ -44,6 +44,24 @@
     --color-dark-600: #1e1e1f;
     --color-blurple-500: #5865f2;
     --color-blurple-600: #4752c4;
+    --color-neutral-10: #f4f4f5;
+    --color-neutral-30: #d4d4d8;
+    --color-neutral-50: #71717a;
+    --color-neutral-60: #52525b;
+    --color-neutral-70: #3f3f46;
+    --color-neutral-90: #18181b;
+    --color-primary-20: #e0e3ff;
+    --color-primary-80: #5865f2;
+    --color-red-20: #fee2e2;
+    --color-red-50: #ef4444;
+    --color-red-60: #dc2626;
+
+    --text-body-sm: 0.875rem;
+    --text-body-sm--line-height: 1.25rem;
+    --text-body-md: 1rem;
+    --text-body-md--line-height: 1.5rem;
+    --text-caption-s: 0.75rem;
+    --text-caption-s--line-height: 1rem;
 
     --animate-fade-in:    fade-in  0.15s ease-out both;
     --animate-fade-out:   fade-out 0.15s ease-in  both;
