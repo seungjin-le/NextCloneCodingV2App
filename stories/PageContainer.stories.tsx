@@ -20,9 +20,11 @@ export const Default: Story = {
     const content = canvas.getByText('페이지 콘텐츠')
     expect(content).toBeInTheDocument()
 
-    // The wrapping div should carry the page-enter animation class
-    const container = content.closest('[class*="animate-page-enter"]')
-    expect(container).not.toBeNull()
+    const animatedContainer = content.closest('[class*="animate-content-enter"]')
+    expect(animatedContainer).not.toBeNull()
+
+    const pageTransitionContainer = content.closest('[class*="animate-page-enter"]')
+    expect(pageTransitionContainer).toBeNull()
   },
 }
 

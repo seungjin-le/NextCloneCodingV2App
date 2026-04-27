@@ -29,6 +29,7 @@ export function WritePostDialog({ open, onOpenChange }: WritePostDialogProps) {
     },
   });
 
+  /* eslint-disable react-hooks/set-state-in-effect */
   useEffect(() => {
     if (open) {
       setClosing(false);
@@ -37,6 +38,7 @@ export function WritePostDialog({ open, onOpenChange }: WritePostDialogProps) {
       setClosing(true);
     }
   }, [open]); // eslint-disable-line react-hooks/exhaustive-deps
+  /* eslint-enable react-hooks/set-state-in-effect */
 
   useEffect(() => {
     if (!open) {

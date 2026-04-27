@@ -3,7 +3,13 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { NAV_TREE, PRIMARY_LABELS, SIDEBAR_SECTIONS } from '@/lib/nav'
+import { useEffect, useMemo, useState } from 'react'
+import {
+  buildSidebarSections,
+  CUSTOM_SIDEBAR_CATEGORIES_CHANGED_EVENT,
+  type CustomSidebarCategory,
+  readCustomSidebarCategoriesFromStorage,
+} from '@/lib/adminCategories'
 
 function homeLinkClass(active: boolean) {
   return [
@@ -26,6 +32,24 @@ type SidebarProps = {
 
 export function Sidebar({ mobileOpen, onMobileClose }: SidebarProps) {
   const pathname = usePathname()
+  const [customCategories, setCustomCategories] = useState<CustomSidebarCategory[]>([])
+  const sidebarSections = useMemo(() => buildSidebarSections(customCategories), [customCategories])
+
+  useEffect(() => {
+    const syncCategories = () => {
+      const categories = readCustomSidebarCategoriesFromStorage(window.localStorage)
+      setCustomCategories(categories)
+    }
+
+    syncCategories()
+    window.addEventListener('storage', syncCategories)
+    window.addEventListener(CUSTOM_SIDEBAR_CATEGORIES_CHANGED_EVENT, syncCategories)
+
+    return () => {
+      window.removeEventListener('storage', syncCategories)
+      window.removeEventListener(CUSTOM_SIDEBAR_CATEGORIES_CHANGED_EVENT, syncCategories)
+    }
+  }, [])
 
   return (
     <>
@@ -51,21 +75,19 @@ export function Sidebar({ mobileOpen, onMobileClose }: SidebarProps) {
             홈
           </Link>
 
-          {SIDEBAR_SECTIONS.map((section) => (
+          {sidebarSections.map((section) => (
             <div key={section.category}>
               <div className="mb-1.5 px-3 text-xs font-semibold tracking-wide text-zinc-500" aria-hidden>
-                {PRIMARY_LABELS[section.category]}
+                {section.label}
               </div>
               <ul className="flex flex-col gap-0.5">
-                {section.slugs.map((slug) => {
-                  const label = NAV_TREE[section.category][slug]
-                  const href = `/${section.category}/${slug}`
-                  const active = pathname === href
+                {section.items.map((item) => {
+                  const active = pathname === item.href
 
                   return (
-                    <li key={href}>
-                      <Link href={href} className={subLinkClass(active)} onClick={() => onMobileClose()}>
-                        {label}
+                    <li key={item.href}>
+                      <Link href={item.href} className={subLinkClass(active)} onClick={() => onMobileClose()}>
+                        {item.label}
                       </Link>
                     </li>
                   )

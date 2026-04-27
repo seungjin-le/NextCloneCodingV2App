@@ -1,9 +1,17 @@
 import Link from 'next/link'
+import { cookies } from 'next/headers'
 import { notFound } from 'next/navigation'
 import { PageLayout, ContentContainer } from '@/components/container'
 import { FeedSection } from '@/components/FeedSection'
 import { type BusinessFunction } from '@/lib/data'
-import { getNavPageLabel, isValidNavPath } from '@/lib/nav'
+import {
+  CUSTOM_SIDEBAR_CATEGORIES_COOKIE_NAME,
+} from '@/lib/adminCategories'
+import {
+  getAdminCategoryCookieSecret,
+  parseSignedCustomSidebarCategoriesCookie,
+} from '@/lib/adminCategoryCookie'
+import { getNavPageLabel } from '@/lib/nav'
 
 type Params = { category: string; slug: string }
 type SearchParams = { type?: string; q?: string }
@@ -18,6 +26,17 @@ function isBusinessFunction(v: string | undefined): v is BusinessFunction {
   return v === 'sell' || v === 'buy' || v === 'swap'
 }
 
+async function getCustomSidebarCategoriesFromCookie() {
+  const secret = getAdminCategoryCookieSecret(process.env)
+  if (!secret) return []
+
+  const cookieStore = await cookies()
+  return parseSignedCustomSidebarCategoriesCookie(
+    cookieStore.get(CUSTOM_SIDEBAR_CATEGORIES_COOKIE_NAME)?.value,
+    secret
+  )
+}
+
 export default async function CategoryPage({
   params,
   searchParams,
@@ -27,8 +46,9 @@ export default async function CategoryPage({
 }) {
   const { category, slug } = await params
   const { type, q = '' } = await searchParams
+  const customCategories = await getCustomSidebarCategoriesFromCookie()
 
-  const labels = getNavPageLabel(category, slug)
+  const labels = getNavPageLabel(category, slug, customCategories)
   if (!labels) notFound()
   const activeTab: BusinessFunction = isBusinessFunction(type) ? type : 'sell'
 
@@ -86,7 +106,8 @@ export default async function CategoryPage({
 
 export async function generateMetadata({ params }: { params: Promise<Params> }) {
   const { category, slug } = await params
-  const labels = getNavPageLabel(category, slug)
+  const customCategories = await getCustomSidebarCategoriesFromCookie()
+  const labels = getNavPageLabel(category, slug, customCategories)
   if (!labels) return {}
   return {
     title: `${labels.secondary} | 구해요`,

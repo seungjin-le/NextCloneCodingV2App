@@ -40,10 +40,14 @@ export default async function PostDetailPage({ params }: { params: Promise<{ id:
         <span className="min-w-0 truncate text-zinc-400">{post.title}</span>
       </nav>
 
+      <div className="mx-auto mb-4 w-full max-w-3xl">
+        <h1 className="text-xl leading-snug font-bold text-zinc-100">{post.title}</h1>
+      </div>
+
       <ContentContainer>
         {/* 게시글 카드 */}
         <article className="bg-dark-600 rounded-xl border border-zinc-700/60 p-5 shadow-lg">
-          {/* 배지 + 제목 */}
+          {/* 배지 */}
           <div className="mb-3 flex flex-wrap items-center gap-2">
             <span className={`rounded border px-2 py-0.5 text-xs font-semibold ${bf.className}`}>{bf.text}</span>
             {post.tags.slice(0, 2).map((tag) => (
@@ -52,8 +56,6 @@ export default async function PostDetailPage({ params }: { params: Promise<{ id:
               </span>
             ))}
           </div>
-
-          <h1 className="mb-3 text-xl leading-snug font-bold text-zinc-100">{post.title}</h1>
 
           {/* 메타 정보 */}
           <div className="mb-4 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-sm text-zinc-500">

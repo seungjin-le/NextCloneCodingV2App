@@ -1,6 +1,7 @@
 import { defineConfig, globalIgnores } from 'eslint/config'
 import nextVitals from 'eslint-config-next/core-web-vitals'
 import nextTs from 'eslint-config-next/typescript'
+import globals from 'globals'
 import reactHooks from 'eslint-plugin-react-hooks'
 import reactRefresh from 'eslint-plugin-react-refresh'
 
@@ -16,7 +17,7 @@ const eslintConfig = defineConfig([
     rules: {
       ...(reactHooks.configs['recommended-latest']?.rules ?? {}),
       '@typescript-eslint/no-explicit-any': 'off',
-      'react-refresh/only-export-components': ['warn', { allowConstantExport: true, argsIgnorePattern: '^_', varsIgnorePattern: '^_', caughtErrorsIgnorePattern: '^_' }]
+      'react-refresh/only-export-components': ['warn', { allowConstantExport: true, allowExportNames: ['metadata', 'generateMetadata'] }]
     }
   },
 

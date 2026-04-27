@@ -1,7 +1,6 @@
 import Link from 'next/link'
 import { PageContainer } from '@/components/container'
 import { FeedSection } from '@/components/FeedSection'
-import { ReportReview } from '@/components/ReportReview'
 
 const QUICK_LINKS = [
   { href: '/group/keyboard', label: '⌨️ 키보드' },

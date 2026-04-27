@@ -52,3 +52,4 @@ storybook-static
 .omc
 .idea
 .claude
+.codex/settings.local.json

@@ -3,6 +3,8 @@
 :root {
     --background: #323338;
     --foreground: #e4e4e7;
+    --font-noto-sans-kr: "Noto Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", system-ui, sans-serif;
+    --font-geist-mono: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
 }
 
 @keyframes fade-in {
@@ -29,11 +31,10 @@
   from { transform: scale(1);    opacity: 1; }
   to   { transform: scale(0.95); opacity: 0; }
 }
-@keyframes page-enter {
+@keyframes content-enter {
   from { opacity: 0; transform: translateY(6px); }
   to   { opacity: 1; transform: translateY(0);   }
 }
-
 @theme inline {
     --color-background: var(--background);
     --color-foreground: var(--foreground);
@@ -69,7 +70,7 @@
     --animate-slide-down: slide-down 0.18s ease-in both;
     --animate-scale-in:   scale-in  0.18s cubic-bezier(0.32,0.72,0,1) both;
     --animate-scale-out:  scale-out 0.15s ease-in both;
-    --animate-page-enter: page-enter 0.25s cubic-bezier(0.22, 1, 0.36, 1) both;
+    --animate-content-enter: content-enter 0.22s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
 body {

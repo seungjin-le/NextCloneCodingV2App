@@ -1,3 +1,5 @@
+import type { CustomSidebarCategory } from './adminCategories'
+
 /** 사이드바 표시 순서 (1차 → 2차 슬러그 목록) */
 export const SIDEBAR_SECTIONS = [
   { category: 'group' as const, slugs: ['keyboard', 'mouse', 'audio'] as const },
@@ -31,14 +33,23 @@ export const PRIMARY_LABELS: Record<string, string> = {
   community: '커뮤니티'
 }
 
-export type NavCategory = keyof typeof NAV_TREE
+export type NavCategory = 'group' | 'market' | 'community'
 
-export function getNavPageLabel(category: string, slug: string): { primary: string; secondary: string } | null {
+export function getNavPageLabel(
+  category: string,
+  slug: string,
+  customCategories: CustomSidebarCategory[] = []
+): { primary: string; secondary: string } | null {
   const primary = PRIMARY_LABELS[category]
-  const secondary = NAV_TREE[category]?.[slug]
-  if (!primary || !secondary) {
+  if (!primary) {
     return null
   }
+
+  const secondary = NAV_TREE[category]?.[slug]
+    ?? customCategories.find((item) => item.section === category && item.slug === slug)?.label
+
+  if (!secondary) return null
+
   return { primary, secondary }
 }
 
