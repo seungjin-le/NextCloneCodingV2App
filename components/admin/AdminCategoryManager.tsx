@@ -1,16 +1,13 @@
 'use client'
 
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useMemo, useState, useSyncExternalStore } from 'react'
+import { useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import {
   buildSidebarSections,
   CUSTOM_SIDEBAR_CATEGORIES_CHANGED_EVENT,
   type CustomSidebarCategory,
-  parseCustomSidebarCategories,
-  readCustomSidebarCategoriesFromStorage,
   registerSidebarCategory,
-  writeCustomSidebarCategoriesToStorage,
 } from '@/lib/adminCategories'
 import { PRIMARY_LABELS, type NavCategory } from '@/lib/nav'
 import {
@@ -23,22 +20,6 @@ const SECTION_OPTIONS = [
   { value: 'market', label: PRIMARY_LABELS.market },
   { value: 'community', label: PRIMARY_LABELS.community },
 ] satisfies Array<{ value: NavCategory; label: string }>
-
-const EMPTY_CATEGORIES_SNAPSHOT = '[]'
-
-function getCategoriesSnapshot() {
-  return JSON.stringify(readCustomSidebarCategoriesFromStorage(window.localStorage))
-}
-
-function subscribeCategories(onStoreChange: () => void) {
-  window.addEventListener('storage', onStoreChange)
-  window.addEventListener(CUSTOM_SIDEBAR_CATEGORIES_CHANGED_EVENT, onStoreChange)
-
-  return () => {
-    window.removeEventListener('storage', onStoreChange)
-    window.removeEventListener(CUSTOM_SIDEBAR_CATEGORIES_CHANGED_EVENT, onStoreChange)
-  }
-}
 
 async function signCategoriesForRoutes(categories: CustomSidebarCategory[]) {
   const response = await fetch('/api/admin/sidebar-categories', {
@@ -54,20 +35,20 @@ async function persistCategories(categories: CustomSidebarCategory[]) {
   const signed = await signCategoriesForRoutes(categories)
   if (!signed) return false
 
-  writeCustomSidebarCategoriesToStorage(window.localStorage, categories)
-  window.dispatchEvent(new Event(CUSTOM_SIDEBAR_CATEGORIES_CHANGED_EVENT))
+  window.dispatchEvent(new CustomEvent(CUSTOM_SIDEBAR_CATEGORIES_CHANGED_EVENT, {
+    detail: { categories },
+  }))
 
   return true
 }
 
-export function AdminCategoryManager() {
+export function AdminCategoryManager({
+  initialCategories,
+}: {
+  initialCategories: CustomSidebarCategory[]
+}) {
   const [status, setStatus] = useState('')
-  const categoriesSnapshot = useSyncExternalStore(
-    subscribeCategories,
-    getCategoriesSnapshot,
-    () => EMPTY_CATEGORIES_SNAPSHOT
-  )
-  const categories = useMemo(() => parseCustomSidebarCategories(categoriesSnapshot), [categoriesSnapshot])
+  const [categories, setCategories] = useState<CustomSidebarCategory[]>(initialCategories)
 
   const sidebarSections = useMemo(() => buildSidebarSections(categories), [categories])
   const customCount = categories.length
@@ -106,6 +87,7 @@ export function AdminCategoryManager() {
       return
     }
 
+    setCategories(result.categories)
     reset({ section: result.category.section, label: '', slug: '' })
     setStatus(`${result.category.label} 카테고리를 등록했습니다.`)
   }
@@ -120,6 +102,7 @@ export function AdminCategoryManager() {
       return
     }
 
+    setCategories(nextCategories)
     setStatus(`${category.label} 카테고리를 삭제했습니다.`)
   }
 

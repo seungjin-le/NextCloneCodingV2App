@@ -1,14 +1,20 @@
+import { readFileSync } from 'node:fs'
+import { join } from 'node:path'
 import { describe, expect, it } from 'vitest'
 import {
   buildSidebarSections,
-  CUSTOM_SIDEBAR_CATEGORIES_STORAGE_KEY,
   parseCustomSidebarCategories,
-  readCustomSidebarCategoriesFromStorage,
   registerSidebarCategory,
-  writeCustomSidebarCategoriesToStorage,
 } from '../lib/adminCategories'
 import { getNavPageLabel } from '../lib/nav'
 import { categoryRegistrationSchema, normalizeCategorySlug } from '../lib/validations'
+
+const sidebarSource = readFileSync(join(process.cwd(), 'components/Sidebar.tsx'), 'utf8')
+const adminManagerSource = readFileSync(
+  join(process.cwd(), 'components/admin/AdminCategoryManager.tsx'),
+  'utf8'
+)
+const mainLayoutSource = readFileSync(join(process.cwd(), 'app/(main)/layout.tsx'), 'utf8')
 
 describe('admin sidebar category registration', () => {
   it('normalizes category slugs before validation', () => {
@@ -89,20 +95,20 @@ describe('admin sidebar category registration', () => {
     ])
   })
 
-  it('uses the expected local storage key for category persistence', () => {
-    const storage = new Map<string, string>()
-    const localStorageLike = {
-      getItem: (key: string) => storage.get(key) ?? null,
-      setItem: (key: string, value: string) => storage.set(key, value),
-    }
-    const categories = [
-      { section: 'community' as const, label: '질문', slug: 'questions', createdAt: '2026-04-27T00:00:00.000Z' },
-    ]
+  it('uses the signed server cookie as the initial sidebar category source', () => {
+    expect(mainLayoutSource).toContain('getCustomSidebarCategoriesFromCookie')
+    expect(mainLayoutSource).toContain('initialCustomSidebarCategories')
+    expect(sidebarSource).toContain('initialCustomCategories')
+    expect(sidebarSource).not.toContain('localStorage')
+    expect(sidebarSource).not.toContain("addEventListener('storage'")
+  })
 
-    writeCustomSidebarCategoriesToStorage(localStorageLike, categories)
-
-    expect(storage.has(CUSTOM_SIDEBAR_CATEGORIES_STORAGE_KEY)).toBe(true)
-    expect(readCustomSidebarCategoriesFromStorage(localStorageLike)).toEqual(categories)
+  it('updates same-tab category UI through explicit category event payloads', () => {
+    expect(adminManagerSource).not.toContain('localStorage')
+    expect(adminManagerSource).toContain('new CustomEvent')
+    expect(adminManagerSource).toContain('detail: { categories }')
+    expect(sidebarSource).toContain('CustomEvent')
+    expect(sidebarSource).toContain('customEvent.detail.categories')
   })
 
   it('resolves custom route labels only from registered categories', () => {

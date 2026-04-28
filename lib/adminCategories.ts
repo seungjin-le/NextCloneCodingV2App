@@ -2,7 +2,6 @@ import { NAV_TREE, PRIMARY_LABELS, SIDEBAR_SECTIONS, type NavCategory } from './
 import { categoryRegistrationSchema, type CategoryRegistrationFormValues } from './validations'
 import { z } from 'zod'
 
-export const CUSTOM_SIDEBAR_CATEGORIES_STORAGE_KEY = 'guheyo:sidebar-categories'
 export const CUSTOM_SIDEBAR_CATEGORIES_COOKIE_NAME = 'guheyo_sidebar_categories'
 export const CUSTOM_SIDEBAR_CATEGORIES_CHANGED_EVENT = 'guheyo:sidebar-categories-changed'
 
@@ -107,12 +106,4 @@ export function parseCustomSidebarCategories(value: string | null): CustomSideba
   } catch {
     return []
   }
-}
-
-export function readCustomSidebarCategoriesFromStorage(storage: Pick<Storage, 'getItem'>) {
-  return parseCustomSidebarCategories(storage.getItem(CUSTOM_SIDEBAR_CATEGORIES_STORAGE_KEY))
-}
-
-export function writeCustomSidebarCategoriesToStorage(storage: Pick<Storage, 'setItem'>, categories: CustomSidebarCategory[]) {
-  storage.setItem(CUSTOM_SIDEBAR_CATEGORIES_STORAGE_KEY, JSON.stringify(categories))
 }

@@ -46,12 +46,17 @@ export function SiteHeader({ onMenuClick }: SiteHeaderProps) {
   const [searchExpanded, setSearchExpanded] = useState(false)
   const [writeOpen, setWriteOpen] = useState(false)
   const searchTriggerRef = useRef<HTMLButtonElement>(null)
+  const mobileSearchInputRef = useRef<HTMLInputElement>(null)
+  const desktopSearchInputRef = useRef<HTMLInputElement>(null)
 
   const openSearch = () => {
     if (searchExpanded) return
     setSearchExpanded(true)
     setTimeout(() => {
-      ;(document.getElementById('header-search-q') as HTMLInputElement | null)?.focus()
+      const target = window.matchMedia('(min-width: 1024px)').matches
+        ? desktopSearchInputRef.current
+        : mobileSearchInputRef.current
+      target?.focus()
     }, 50)
   }
 
@@ -96,7 +101,7 @@ export function SiteHeader({ onMenuClick }: SiteHeaderProps) {
                 searchExpanded ? 'w-40 opacity-100' : 'w-0 opacity-0 pointer-events-none',
               ].join(' ')}
             >
-              <SearchForm compact />
+              <SearchForm compact inputId="mobile-header-search-q" inputRef={mobileSearchInputRef} />
             </div>
 
             <button
@@ -141,7 +146,7 @@ export function SiteHeader({ onMenuClick }: SiteHeaderProps) {
               searchExpanded ? 'w-72 opacity-100' : 'w-0 opacity-0 pointer-events-none',
             ].join(' ')}
           >
-            <SearchForm compact />
+            <SearchForm compact inputId="desktop-header-search-q" inputRef={desktopSearchInputRef} />
           </div>
 
           <button

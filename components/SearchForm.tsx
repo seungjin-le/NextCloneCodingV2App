@@ -2,18 +2,39 @@
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { Suspense, useEffect } from 'react'
+import { Suspense, useEffect, useId, type Ref } from 'react'
 import { useForm } from 'react-hook-form'
 import { type SearchFormValues, searchSchema } from '@/lib/validations'
 
 type SearchFormFieldsProps = {
   autoFocus?: boolean
   compact?: boolean
+  inputId?: string
+  inputRef?: Ref<HTMLInputElement>
 }
 
-function SearchFormFields({ autoFocus, compact }: SearchFormFieldsProps) {
+function assignInputRef(
+  node: HTMLInputElement | null,
+  formRef: Ref<HTMLInputElement>,
+  inputRef?: Ref<HTMLInputElement>
+) {
+  if (typeof formRef === 'function') {
+    formRef(node)
+  } else if (formRef) {
+    formRef.current = node
+  }
+
+  if (typeof inputRef === 'function') {
+    inputRef(node)
+  } else if (inputRef) {
+    inputRef.current = node
+  }
+}
+
+function SearchFormFields({ autoFocus, compact, inputId, inputRef }: SearchFormFieldsProps) {
   const router = useRouter()
   const searchParams = useSearchParams()
+  const generatedInputId = useId()
   const {
     register,
     handleSubmit,
@@ -23,6 +44,8 @@ function SearchFormFields({ autoFocus, compact }: SearchFormFieldsProps) {
     resolver: zodResolver(searchSchema),
     defaultValues: { q: searchParams.get('q') ?? '' }
   })
+  const qField = register('q')
+  const searchInputId = inputId ?? generatedInputId
 
   useEffect(() => {
     reset({ q: searchParams.get('q') ?? '' })
@@ -35,17 +58,18 @@ function SearchFormFields({ autoFocus, compact }: SearchFormFieldsProps) {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="flex w-full items-center gap-2">
       <div className="min-w-0 flex-1">
-        <label htmlFor="header-search-q" className="sr-only">
+        <label htmlFor={searchInputId} className="sr-only">
           검색어
         </label>
         <input
-          id="header-search-q"
+          id={searchInputId}
           type="search"
           autoComplete="off"
           autoFocus={autoFocus}
           placeholder="게시글 검색..."
           className="focus:border-blurple-500 focus:ring-blurple-500 w-full rounded-lg border border-zinc-600 bg-zinc-800/90 px-3 py-2 text-sm text-zinc-100 placeholder:text-zinc-500 focus:ring-1 focus:outline-none"
-          {...register('q')}
+          {...qField}
+          ref={(node) => assignInputRef(node, qField.ref, inputRef)}
         />
         {errors.q ? (
           <p className="mt-1 text-xs text-red-400" role="alert">
@@ -74,12 +98,19 @@ function SearchFormFallback() {
 type SearchFormProps = {
   autoFocus?: boolean
   compact?: boolean
+  inputId?: string
+  inputRef?: Ref<HTMLInputElement>
 }
 
-export function SearchForm({ autoFocus, compact }: SearchFormProps) {
+export function SearchForm({ autoFocus, compact, inputId, inputRef }: SearchFormProps) {
   return (
     <Suspense fallback={<SearchFormFallback />}>
-      <SearchFormFields autoFocus={autoFocus} compact={compact} />
+      <SearchFormFields
+        autoFocus={autoFocus}
+        compact={compact}
+        inputId={inputId}
+        inputRef={inputRef}
+      />
     </Suspense>
   )
 }

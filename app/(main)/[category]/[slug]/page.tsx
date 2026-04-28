@@ -1,16 +1,9 @@
 import Link from 'next/link'
-import { cookies } from 'next/headers'
 import { notFound } from 'next/navigation'
 import { PageLayout, ContentContainer } from '@/components/container'
 import { FeedSection } from '@/components/FeedSection'
 import { type BusinessFunction } from '@/lib/data'
-import {
-  CUSTOM_SIDEBAR_CATEGORIES_COOKIE_NAME,
-} from '@/lib/adminCategories'
-import {
-  getAdminCategoryCookieSecret,
-  parseSignedCustomSidebarCategoriesCookie,
-} from '@/lib/adminCategoryCookie'
+import { getCustomSidebarCategoriesFromCookie } from '@/lib/adminCategoryServer'
 import { getNavPageLabel } from '@/lib/nav'
 
 type Params = { category: string; slug: string }
@@ -24,17 +17,6 @@ const TABS = [
 
 function isBusinessFunction(v: string | undefined): v is BusinessFunction {
   return v === 'sell' || v === 'buy' || v === 'swap'
-}
-
-async function getCustomSidebarCategoriesFromCookie() {
-  const secret = getAdminCategoryCookieSecret(process.env)
-  if (!secret) return []
-
-  const cookieStore = await cookies()
-  return parseSignedCustomSidebarCategoriesCookie(
-    cookieStore.get(CUSTOM_SIDEBAR_CATEGORIES_COOKIE_NAME)?.value,
-    secret
-  )
 }
 
 export default async function CategoryPage({

@@ -1,12 +1,15 @@
 import { AdminCategoryManager } from '@/components/admin/AdminCategoryManager'
 import { PageLayout } from '@/components/container'
+import { getCustomSidebarCategoriesFromCookie } from '@/lib/adminCategoryServer'
 
 export const metadata = {
   title: '카테고리 관리 | 구해요',
   description: '사이드바 카테고리를 등록하고 미리보는 어드민 페이지',
 }
 
-export default function AdminCategoriesPage() {
+export default async function AdminCategoriesPage() {
+  const initialCategories = await getCustomSidebarCategoriesFromCookie()
+
   return (
     <PageLayout>
       <div className="mb-6">
@@ -17,7 +20,7 @@ export default function AdminCategoriesPage() {
         </p>
       </div>
 
-      <AdminCategoryManager />
+      <AdminCategoryManager initialCategories={initialCategories} />
     </PageLayout>
   )
 }

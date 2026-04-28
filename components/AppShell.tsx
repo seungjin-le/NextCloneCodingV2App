@@ -3,13 +3,21 @@
 import { useState } from "react";
 import { Sidebar } from "@/components/Sidebar";
 import { SiteHeader } from "@/components/SiteHeader";
+import { type CustomSidebarCategory } from "@/lib/adminCategories";
 
-export function AppShell({ children }: { children: React.ReactNode }) {
+export function AppShell({
+  children,
+  initialCustomSidebarCategories,
+}: {
+  children: React.ReactNode;
+  initialCustomSidebarCategories: CustomSidebarCategory[];
+}) {
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
 
   return (
     <div className="flex min-h-screen">
       <Sidebar
+        initialCustomCategories={initialCustomSidebarCategories}
         mobileOpen={mobileSidebarOpen}
         onMobileClose={() => setMobileSidebarOpen(false)}
       />

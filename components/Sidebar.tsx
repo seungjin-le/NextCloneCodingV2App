@@ -8,7 +8,7 @@ import {
   buildSidebarSections,
   CUSTOM_SIDEBAR_CATEGORIES_CHANGED_EVENT,
   type CustomSidebarCategory,
-  readCustomSidebarCategoriesFromStorage,
+  parseCustomSidebarCategories,
 } from '@/lib/adminCategories'
 
 function homeLinkClass(active: boolean) {
@@ -26,27 +26,28 @@ function subLinkClass(active: boolean) {
 }
 
 type SidebarProps = {
+  initialCustomCategories: CustomSidebarCategory[]
   mobileOpen: boolean
   onMobileClose: () => void
 }
 
-export function Sidebar({ mobileOpen, onMobileClose }: SidebarProps) {
+export function Sidebar({ initialCustomCategories, mobileOpen, onMobileClose }: SidebarProps) {
   const pathname = usePathname()
-  const [customCategories, setCustomCategories] = useState<CustomSidebarCategory[]>([])
+  const [eventCategories, setEventCategories] = useState<CustomSidebarCategory[] | null>(null)
+  const customCategories = eventCategories ?? initialCustomCategories
   const sidebarSections = useMemo(() => buildSidebarSections(customCategories), [customCategories])
 
   useEffect(() => {
-    const syncCategories = () => {
-      const categories = readCustomSidebarCategoriesFromStorage(window.localStorage)
-      setCustomCategories(categories)
+    const syncCategories = (event: Event) => {
+      const customEvent = event as CustomEvent<{ categories?: CustomSidebarCategory[] }>
+      if (!customEvent.detail?.categories) return
+
+      setEventCategories(parseCustomSidebarCategories(JSON.stringify(customEvent.detail.categories)))
     }
 
-    syncCategories()
-    window.addEventListener('storage', syncCategories)
     window.addEventListener(CUSTOM_SIDEBAR_CATEGORIES_CHANGED_EVENT, syncCategories)
 
     return () => {
-      window.removeEventListener('storage', syncCategories)
       window.removeEventListener(CUSTOM_SIDEBAR_CATEGORIES_CHANGED_EVENT, syncCategories)
     }
   }, [])

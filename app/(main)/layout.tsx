@@ -1,9 +1,16 @@
 import { AppShell } from "@/components/AppShell";
+import { getCustomSidebarCategoriesFromCookie } from "@/lib/adminCategoryServer";
 
-export default function MainLayout({
+export default async function MainLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  return <AppShell>{children}</AppShell>;
+  const initialCustomSidebarCategories = await getCustomSidebarCategoriesFromCookie();
+
+  return (
+    <AppShell initialCustomSidebarCategories={initialCustomSidebarCategories}>
+      {children}
+    </AppShell>
+  );
 }
