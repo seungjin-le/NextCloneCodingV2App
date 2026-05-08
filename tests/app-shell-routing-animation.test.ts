@@ -38,6 +38,6 @@ describe('AppShell route transitions', () => {
 
     expect(postDetailPageSource.indexOf('<nav')).toBeLessThan(postDetailPageSource.indexOf('<ContentContainer>'))
     expect(postDetailPageSource.indexOf('<h1')).toBeLessThan(postDetailPageSource.indexOf('<ContentContainer>'))
-    expect(postDetailPageSource.indexOf('post.tags.slice')).toBeGreaterThan(postDetailPageSource.indexOf('<ContentContainer>'))
+    expect(postDetailPageSource.indexOf('<PostTags')).toBeGreaterThan(postDetailPageSource.indexOf('<ContentContainer>'))
   })
 })

@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { type BusinessFunction, type MockPost, getLatestPosts, getPostsByCategory } from '@/lib/data'
+import { PostCard } from '@/components/post'
 
 const LABELS: Record<BusinessFunction, { title: string; accent: string; moreHref: string }> = {
   sell: { title: '판매', accent: 'from-emerald-500/20 to-emerald-500/5', moreHref: '/group/keyboard?type=sell' },
@@ -16,46 +17,6 @@ function filterByQuery(posts: MockPost[], query: string): MockPost[] {
       p.author.toLowerCase().includes(q) ||
       p.price.toLowerCase().includes(q) ||
       p.tags.some((t) => t.toLowerCase().includes(q)),
-  )
-}
-
-function PostCard({ post }: { post: MockPost }) {
-  return (
-    <li>
-      <Link href={`/posts/${post.id}`}>
-        <article className="flex gap-3 rounded-lg border border-zinc-700/50 bg-dark-600/80 p-3 transition hover:border-zinc-500 hover:bg-dark-600">
-          <div
-            className={`flex size-12 shrink-0 items-center justify-center rounded-md text-sm font-bold text-zinc-300 ${post.thumbnailColor}`}
-          >
-            {post.author.slice(0, 2).toUpperCase()}
-          </div>
-          <div className="min-w-0 flex-1">
-            <p className="truncate text-sm font-semibold text-zinc-200">{post.title}</p>
-            <div className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-zinc-500">
-              <span>{post.author}</span>
-              <span className="font-medium text-emerald-400/90">{post.price}</span>
-              <span>{post.time}</span>
-            </div>
-            {post.tags.length > 0 && (
-              <div className="mt-1.5 flex flex-wrap gap-1">
-                {post.tags.slice(0, 3).map((tag) => (
-                  <span
-                    key={tag}
-                    className="rounded bg-zinc-800 px-1.5 py-0.5 text-[10px] text-zinc-400"
-                  >
-                    #{tag}
-                  </span>
-                ))}
-              </div>
-            )}
-          </div>
-          <div className="flex shrink-0 flex-col items-end justify-between gap-1 text-xs text-zinc-600">
-            <span>👁 {post.viewCount}</span>
-            <span>♡ {post.likeCount}</span>
-          </div>
-        </article>
-      </Link>
-    </li>
   )
 }
 

@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { useEffect, useRef, useState } from 'react'
 import { SearchForm } from '@/components/SearchForm'
 import { WritePostDialog } from '@/components/WritePostDialog'
+import { DiscordButton, IconButton } from '@/components/ui'
 
 function IconSearch(props: React.SVGProps<SVGSVGElement>) {
   return (
@@ -79,14 +80,9 @@ export function SiteHeader({ onMenuClick }: SiteHeaderProps) {
         {/* 모바일 헤더 (lg 미만) */}
         <div className="flex h-14 items-center justify-between px-4 lg:hidden">
           <div className="flex items-center gap-3">
-            <button
-              type="button"
-              aria-label="메뉴 열기"
-              className="inline-flex size-9 items-center justify-center rounded-full text-zinc-300 transition hover:bg-white/5"
-              onClick={() => onMenuClick?.()}
-            >
+            <IconButton label="메뉴 열기" onClick={() => onMenuClick?.()}>
               <IconMenu className="size-5" />
-            </button>
+            </IconButton>
             <Link href="/" className="flex items-center gap-2">
               <Image src="/guheyo/guheyo-logo.svg" alt="구해요 로고" width={28} height={28} className="size-7 object-cover" priority />
               <span className="text-base font-bold tracking-tight text-zinc-100">구해요</span>
@@ -104,34 +100,21 @@ export function SiteHeader({ onMenuClick }: SiteHeaderProps) {
               <SearchForm compact inputId="mobile-header-search-q" inputRef={mobileSearchInputRef} />
             </div>
 
-            <button
+            <IconButton
               ref={searchTriggerRef}
-              type="button"
-              aria-label={searchExpanded ? '검색 닫기' : '검색 열기'}
+              label={searchExpanded ? '검색 닫기' : '검색 열기'}
               aria-expanded={searchExpanded}
               onClick={searchExpanded ? closeSearch : openSearch}
-              className="inline-flex size-9 items-center justify-center rounded-full text-zinc-300 transition hover:bg-white/5"
             >
               {searchExpanded ? <IconClose className="size-5" /> : <IconSearch className="size-5" />}
-            </button>
+            </IconButton>
 
             {!searchExpanded && (
               <>
-                <button
-                  type="button"
-                  aria-label="글쓰기"
-                  onClick={() => setWriteOpen(true)}
-                  className="inline-flex size-9 items-center justify-center rounded-full text-zinc-300 transition hover:bg-white/5"
-                >
+                <IconButton label="글쓰기" onClick={() => setWriteOpen(true)}>
                   <IconAdd className="size-6" />
-                </button>
-                <button
-                  type="button"
-                  className="bg-blurple-500 hover:bg-blurple-600 ml-1 inline-flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-xs font-bold text-zinc-100 transition"
-                >
-                  <Image src="/socials/discord/discord-mark-white.svg" alt="" width={16} height={16} className="size-4" />
-                  로그인
-                </button>
+                </IconButton>
+                <DiscordButton label="로그인" size="sm" className="ml-1 font-bold text-zinc-100" />
               </>
             )}
           </div>
@@ -149,32 +132,19 @@ export function SiteHeader({ onMenuClick }: SiteHeaderProps) {
             <SearchForm compact inputId="desktop-header-search-q" inputRef={desktopSearchInputRef} />
           </div>
 
-          <button
+          <IconButton
             ref={searchTriggerRef}
-            type="button"
-            aria-label={searchExpanded ? '검색 닫기' : '검색 열기'}
+            label={searchExpanded ? '검색 닫기' : '검색 열기'}
             aria-expanded={searchExpanded}
             onClick={searchExpanded ? closeSearch : openSearch}
-            className="inline-flex size-9 items-center justify-center rounded-full text-zinc-300 transition hover:bg-white/5"
           >
             {searchExpanded ? <IconClose className="size-5" /> : <IconSearch className="size-5" />}
-          </button>
+          </IconButton>
 
-          <button
-            type="button"
-            aria-label="글쓰기"
-            onClick={() => setWriteOpen(true)}
-            className="inline-flex size-9 items-center justify-center rounded-full text-zinc-300 transition hover:bg-white/5"
-          >
+          <IconButton label="글쓰기" onClick={() => setWriteOpen(true)}>
             <IconAdd className="size-6" />
-          </button>
-          <button
-            type="button"
-            className="bg-blurple-500 hover:bg-blurple-600 inline-flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-bold text-zinc-100 transition"
-          >
-            <Image src="/socials/discord/discord-mark-white.svg" alt="" width={18} height={18} className="size-[18px]" />
-            로그인
-          </button>
+          </IconButton>
+          <DiscordButton label="로그인" className="font-bold text-zinc-100" />
         </div>
       </header>
 
