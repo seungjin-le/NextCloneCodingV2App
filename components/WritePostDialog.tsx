@@ -3,6 +3,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useCallback, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import { fieldControlClassName, FormField } from "@/components/forms";
 import { type WritePostFormValues, writePostSchema } from "@/lib/validations";
 
 type WritePostDialogProps = {
@@ -100,78 +101,66 @@ export function WritePostDialog({ open, onOpenChange }: WritePostDialogProps) {
           className="flex flex-col gap-3"
           noValidate
         >
-          <div>
-            <label htmlFor="write-category" className="mb-1 block text-xs font-medium text-zinc-400">
-              유형
-            </label>
+          <FormField
+            id="write-category"
+            label="유형"
+            labelClassName="mb-1 text-xs text-zinc-400"
+            error={errors.category?.message}
+          >
             <select
               id="write-category"
-              className="w-full rounded-lg border border-zinc-600 bg-zinc-800 px-3 py-2 text-sm text-zinc-100 focus:border-blurple-500 focus:outline-none focus:ring-1 focus:ring-blurple-500"
+              className={fieldControlClassName}
               {...register("category")}
             >
               <option value="sell">판매</option>
               <option value="buy">구매</option>
               <option value="swap">교환</option>
             </select>
-            {errors.category ? (
-              <p className="mt-1 text-xs text-red-400" role="alert">
-                {errors.category.message}
-              </p>
-            ) : null}
-          </div>
+          </FormField>
 
-          <div>
-            <label htmlFor="write-title" className="mb-1 block text-xs font-medium text-zinc-400">
-              제목
-            </label>
+          <FormField
+            id="write-title"
+            label="제목"
+            labelClassName="mb-1 text-xs text-zinc-400"
+            error={errors.title?.message}
+          >
             <input
               id="write-title"
               type="text"
-              className="w-full rounded-lg border border-zinc-600 bg-zinc-800 px-3 py-2 text-sm text-zinc-100 focus:border-blurple-500 focus:outline-none focus:ring-1 focus:ring-blurple-500"
+              className={fieldControlClassName}
               {...register("title")}
             />
-            {errors.title ? (
-              <p className="mt-1 text-xs text-red-400" role="alert">
-                {errors.title.message}
-              </p>
-            ) : null}
-          </div>
+          </FormField>
 
-          <div>
-            <label htmlFor="write-price" className="mb-1 block text-xs font-medium text-zinc-400">
-              가격 / 조건
-            </label>
+          <FormField
+            id="write-price"
+            label="가격 / 조건"
+            labelClassName="mb-1 text-xs text-zinc-400"
+            error={errors.price?.message}
+          >
             <input
               id="write-price"
               type="text"
               placeholder="예: ₩10,000, 협의, 1:1"
-              className="w-full rounded-lg border border-zinc-600 bg-zinc-800 px-3 py-2 text-sm text-zinc-100 placeholder:text-zinc-500 focus:border-blurple-500 focus:outline-none focus:ring-1 focus:ring-blurple-500"
+              className={`${fieldControlClassName} placeholder:text-zinc-500`}
               {...register("price")}
             />
-            {errors.price ? (
-              <p className="mt-1 text-xs text-red-400" role="alert">
-                {errors.price.message}
-              </p>
-            ) : null}
-          </div>
+          </FormField>
 
-          <div>
-            <label htmlFor="write-body" className="mb-1 block text-xs font-medium text-zinc-400">
-              내용
-            </label>
+          <FormField
+            id="write-body"
+            label="내용"
+            labelClassName="mb-1 text-xs text-zinc-400"
+            error={errors.body?.message}
+          >
             <textarea
               id="write-body"
               rows={5}
-              className="w-full resize-y rounded-lg border border-zinc-600 bg-zinc-800 px-3 py-2 text-sm text-zinc-100 placeholder:text-zinc-500 focus:border-blurple-500 focus:outline-none focus:ring-1 focus:ring-blurple-500"
+              className={`${fieldControlClassName} resize-y placeholder:text-zinc-500`}
               placeholder="거래 조건·연락 방법 등을 적어 주세요"
               {...register("body")}
             />
-            {errors.body ? (
-              <p className="mt-1 text-xs text-red-400" role="alert">
-                {errors.body.message}
-              </p>
-            ) : null}
-          </div>
+          </FormField>
 
           {isSubmitSuccessful ? (
             <p className="text-sm text-emerald-400" role="status">

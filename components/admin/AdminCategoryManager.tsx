@@ -3,6 +3,7 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
+import { fieldControlClassName, FormField } from '@/components/forms'
 import {
   buildSidebarSections,
   CUSTOM_SIDEBAR_CATEGORIES_CHANGED_EVENT,
@@ -115,13 +116,10 @@ export function AdminCategoryManager({
         </div>
 
         <form className="flex flex-col gap-4" noValidate onSubmit={handleSubmit(onSubmit)}>
-          <div>
-            <label htmlFor="category-section" className="mb-1.5 block text-sm font-medium text-zinc-300">
-              상위 메뉴
-            </label>
+          <FormField id="category-section" label="상위 메뉴" error={errors.section?.message}>
             <select
               id="category-section"
-              className="w-full rounded-lg border border-zinc-600 bg-zinc-800 px-3 py-2 text-sm text-zinc-100 focus:border-blurple-500 focus:outline-none focus:ring-1 focus:ring-blurple-500"
+              className={fieldControlClassName}
               {...register('section')}
             >
               {SECTION_OPTIONS.map((option) => (
@@ -130,50 +128,32 @@ export function AdminCategoryManager({
                 </option>
               ))}
             </select>
-            {errors.section ? (
-              <p className="mt-1 text-xs text-red-400" role="alert">
-                {errors.section.message}
-              </p>
-            ) : null}
-          </div>
+          </FormField>
 
-          <div>
-            <label htmlFor="category-label" className="mb-1.5 block text-sm font-medium text-zinc-300">
-              카테고리명
-            </label>
+          <FormField id="category-label" label="카테고리명" error={errors.label?.message}>
             <input
               id="category-label"
               type="text"
               placeholder="예: 키캡"
-              className="w-full rounded-lg border border-zinc-600 bg-zinc-800 px-3 py-2 text-sm text-zinc-100 placeholder:text-zinc-500 focus:border-blurple-500 focus:outline-none focus:ring-1 focus:ring-blurple-500"
+              className={`${fieldControlClassName} placeholder:text-zinc-500`}
               {...register('label')}
             />
-            {errors.label ? (
-              <p className="mt-1 text-xs text-red-400" role="alert">
-                {errors.label.message}
-              </p>
-            ) : null}
-          </div>
+          </FormField>
 
-          <div>
-            <label htmlFor="category-slug" className="mb-1.5 block text-sm font-medium text-zinc-300">
-              URL 슬러그
-            </label>
+          <FormField
+            id="category-slug"
+            label="URL 슬러그"
+            error={errors.slug?.message}
+            helperText="영문, 숫자, 하이픈만 사용합니다."
+          >
             <input
               id="category-slug"
               type="text"
               placeholder="예: keycaps"
-              className="w-full rounded-lg border border-zinc-600 bg-zinc-800 px-3 py-2 text-sm text-zinc-100 placeholder:text-zinc-500 focus:border-blurple-500 focus:outline-none focus:ring-1 focus:ring-blurple-500"
+              className={`${fieldControlClassName} placeholder:text-zinc-500`}
               {...register('slug')}
             />
-            {errors.slug ? (
-              <p className="mt-1 text-xs text-red-400" role="alert">
-                {errors.slug.message}
-              </p>
-            ) : (
-              <p className="mt-1 text-xs text-zinc-500">영문, 숫자, 하이픈만 사용합니다.</p>
-            )}
-          </div>
+          </FormField>
 
           {status ? (
             <p className="rounded-lg border border-emerald-500/30 bg-emerald-500/10 px-3 py-2 text-sm text-emerald-300" role="status">

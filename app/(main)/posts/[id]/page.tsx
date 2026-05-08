@@ -1,17 +1,12 @@
-import Image from 'next/image'
 import Link from 'next/link'
 import { PageLayout, ContentContainer } from '@/components/container'
 import { notFound } from 'next/navigation'
 import { FeedSection } from '@/components/FeedSection'
 import { ImageGallery } from '@/components/ImageGallery'
+import { BusinessFunctionBadge, PostAvatar, PostStats, PostTags } from '@/components/post'
+import { DiscordButton } from '@/components/ui'
 import { getNavPageLabel } from '@/lib/nav'
 import { getPostById, getSimilarPosts } from '@/lib/data'
-
-const BF_LABELS = {
-  sell: { text: '판매', className: 'bg-emerald-500/20 text-emerald-400 border-emerald-500/40' },
-  buy: { text: '구매', className: 'bg-sky-500/20 text-sky-400 border-sky-500/40' },
-  swap: { text: '교환', className: 'bg-violet-500/20 text-violet-400 border-violet-500/40' }
-}
 
 export default async function PostDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
@@ -19,7 +14,6 @@ export default async function PostDetailPage({ params }: { params: Promise<{ id:
   if (!post) notFound()
 
   const labels = getNavPageLabel(post.category, post.slug)
-  const bf = BF_LABELS[post.businessFunction]
   const similar = getSimilarPosts(post)
 
   return (
@@ -49,25 +43,18 @@ export default async function PostDetailPage({ params }: { params: Promise<{ id:
         <article className="bg-dark-600 rounded-xl border border-zinc-700/60 p-5 shadow-lg">
           {/* 배지 */}
           <div className="mb-3 flex flex-wrap items-center gap-2">
-            <span className={`rounded border px-2 py-0.5 text-xs font-semibold ${bf.className}`}>{bf.text}</span>
-            {post.tags.slice(0, 2).map((tag) => (
-              <span key={tag} className="rounded bg-zinc-800 px-1.5 py-0.5 text-[10px] text-zinc-400">
-                #{tag}
-              </span>
-            ))}
+            <BusinessFunctionBadge value={post.businessFunction} />
+            <PostTags tags={post.tags} limit={2} />
           </div>
 
           {/* 메타 정보 */}
           <div className="mb-4 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-sm text-zinc-500">
             <div className="flex items-center gap-2">
-              <div className={`flex size-7 shrink-0 items-center justify-center rounded-full text-xs font-bold text-zinc-300 ${post.thumbnailColor}`}>
-                {post.author.slice(0, 2).toUpperCase()}
-              </div>
+              <PostAvatar author={post.author} colorClassName={post.thumbnailColor} size="sm" />
               <span className="font-medium text-zinc-300">{post.author}</span>
             </div>
             <span>{post.time}</span>
-            <span>👁 {post.viewCount}</span>
-            <span>♡ {post.likeCount}</span>
+            <PostStats viewCount={post.viewCount} likeCount={post.likeCount} />
           </div>
 
           {/* 가격 강조 */}
@@ -87,33 +74,20 @@ export default async function PostDetailPage({ params }: { params: Promise<{ id:
           )}
 
           {/* 전체 태그 */}
-          {post.tags.length > 0 && (
-            <div className="mb-6 flex flex-wrap gap-1.5">
-              {post.tags.map((tag) => (
-                <span key={tag} className="rounded-full border border-zinc-700 bg-zinc-800 px-2.5 py-1 text-xs text-zinc-400">
-                  #{tag}
-                </span>
-              ))}
-            </div>
-          )}
+          <PostTags tags={post.tags} variant="pill" className="mb-6" />
 
           <hr className="mb-5 border-zinc-700/60" />
 
           {/* 작성자 카드 */}
           <div className="flex items-center justify-between gap-4 rounded-lg border border-zinc-700/50 bg-zinc-800/50 p-4">
             <div className="flex items-center gap-3">
-              <div className={`flex size-10 shrink-0 items-center justify-center rounded-full text-sm font-bold text-zinc-300 ${post.thumbnailColor}`}>
-                {post.author.slice(0, 2).toUpperCase()}
-              </div>
+              <PostAvatar author={post.author} colorClassName={post.thumbnailColor} />
               <div>
                 <p className="text-sm font-semibold text-zinc-200">{post.author}</p>
                 <p className="text-xs text-zinc-500">Discord 멤버</p>
               </div>
             </div>
-            <button type="button" className="bg-blurple-500 hover:bg-blurple-600 inline-flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-semibold text-white transition">
-              <Image src="/socials/discord/discord-mark-white.svg" alt="" width={16} height={16} className="size-4" />
-              Discord DM
-            </button>
+            <DiscordButton label="Discord DM" size="sm" />
           </div>
         </article>
 
